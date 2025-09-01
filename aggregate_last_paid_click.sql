@@ -51,39 +51,18 @@ select
     l.utm_source,
     l.utm_medium,
     l.utm_campaign,
-    sum(vk.daily_spent) as total_cost,
+    coalesce(sum(vk.daily_spent),0) + coalesce(sum(ya.daily_spent),0) as total_cost,
     l.leads_count,
     l.purchaces_count,
     l.revenue
 from leads_math as l
-inner join vk_ads as vk
+left join vk_ads as vk
     on
         l.utm_source = vk.utm_source
         and l.utm_medium = vk.utm_medium
         and l.utm_campaign = vk.utm_campaign
         and l.visit_date = vk.campaign_date::date
-group by
-    l.visit_date,
-    l.visitors_count,
-    l.utm_source,
-    l.utm_medium,
-    l.utm_campaign,
-    l.leads_count,
-    l.purchaces_count,
-    l.revenue
-union
-select
-    l.visit_date,
-    l.visitors_count,
-    l.utm_source,
-    l.utm_medium,
-    l.utm_campaign,
-    sum(ya.daily_spent) as total_cost,
-    l.leads_count,
-    l.purchaces_count,
-    l.revenue
-from leads_math as l
-inner join ya_ads as ya
+left join ya_ads as ya
     on
         l.utm_source = ya.utm_source
         and l.utm_medium = ya.utm_medium
