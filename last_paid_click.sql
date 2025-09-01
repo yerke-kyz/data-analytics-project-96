@@ -26,9 +26,9 @@ with paid_visits as (
 select
     pv.visitor_id,
     pv.visit_date,
-    pv.source,
-    pv.medium,
-    pv.campaign,
+    pv.source as utm_source,
+    pv.medium as utm_medium,
+    pv.campaign as utm_campaign,
     l.lead_id,
     l.created_at,
     l.amount,
